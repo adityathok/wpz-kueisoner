@@ -130,26 +130,29 @@ class Wpz_Kueisoner_Form
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <?php foreach ($data['result'] as $datadim) : ?>
-            <div style="max-width: 400px;">
+            <div style="max-width: 100%;">
                 <div>
                     <?php echo $datadim['title']; ?>
                 </div>
                 <canvas id="Chart-<?php echo $datadim['id']; ?>" width="200"></canvas>
             </div>
             <script>
-                const ctx = document.getElementById('Chart-<?php echo $datadim['id']; ?>');
-
-                new Chart(ctx, {
-                    type: 'radar',
-                    data: {
-                        labels: ['<?php echo implode("','", $datadim['label']); ?>'],
-                        datasets: [{
-                            label: '<?php echo $datadim['title']; ?>',
-                            data: [<?php echo implode(",", $datadim['data']); ?>],
-                            borderWidth: 1
-                        }]
-                    },
-                    fill: false,
+                jQuery(function($) {
+                    $(document).ready(function() {
+                        const ctx = document.getElementById('Chart-<?php echo $datadim['id']; ?>');
+                        new Chart(ctx, {
+                            type: 'radar',
+                            data: {
+                                labels: ['<?php echo implode("','", $datadim['label']); ?>'],
+                                datasets: [{
+                                    label: '<?php echo $datadim['title']; ?>',
+                                    data: [<?php echo implode(",", $datadim['data']); ?>],
+                                    borderWidth: 1
+                                }]
+                            },
+                            fill: false,
+                        });
+                    });
                 });
             </script>
         <?php endforeach; ?>
