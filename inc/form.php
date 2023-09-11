@@ -92,7 +92,8 @@ class Wpz_Kueisoner_Form
         if (empty($data))
             return false;
 
-        $result = [];
+        $result         = [];
+        $sumvalue_dim   = 0;
         foreach ($data['value'] as $kdim => $dim) {
             $result_dim             = [];
             $result_dim['id']       = $kdim;
@@ -119,43 +120,51 @@ class Wpz_Kueisoner_Form
             $result_dim['value_faktor']  = $sumvalue_fak;
             $result_dim['total_faktor']  = $total_fak;
             $result_dim['value']         = $total_val;
+            $sumvalue_dim += $total_val;
 
             $result['labels'][]         = get_the_title($kdim);
             $result['datas'][]          = $total_val;
             $result['dimensi'][]        = $result_dim;
         }
-        $data['result'] = $result;
+
+        ///kuisoner result value
+        $result['kuisoner']['total']    = $sumvalue_dim;
+        $result['kuisoner']['count']    = count($result['dimensi']);
+        $result['kuisoner']['value']    = ($sumvalue_dim / $result['kuisoner']['count']);
+
+        $data['result']                 = $result;
+
+        // echo '<pre>';
+        // print_r($result);
+        // echo '</pre>';
+
     ?>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
         <div style="max-width: 100%;">
-            <div>
-                <?php echo $data['title']; ?>
-            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <canvas id="Chartkuiz" width="200"></canvas>
-        </div>
-        <script>
-            jQuery(function($) {
-                $(document).ready(function() {
-                    const ctx = document.getElementById('Chartkuiz');
-                    new Chart(ctx, {
-                        type: 'radar',
-                        data: {
-                            labels: ['<?php echo implode("','",$data['result']['labels']);?>'],
-                            datasets: [
-                                {
-                                    label: '<?php echo $data['title']; ?>',
-                                    data: [<?php echo implode(",",$data['result']['datas']);?>],
-                                    borderWidth: 1
-                                }
-                            ]
-                        },
-                        fill: false,
+            <script>
+                jQuery(function($) {
+                    $(document).ready(function() {
+                        const ctx = document.getElementById('Chartkuiz');
+                        new Chart(ctx, {
+                            type: 'radar',
+                            data: {
+                                labels: ['<?php echo implode("','",$data['result']['labels']);?>'],
+                                datasets: [
+                                    {
+                                        label: '<?php echo $data['title']; ?>',
+                                        data: [<?php echo implode(",",$data['result']['datas']);?>],
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            fill: false,
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
+        </div>
 
 <?php
     }
