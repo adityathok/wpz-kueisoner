@@ -76,7 +76,8 @@ class Wpz_Kueisoner_Form
                         <?php endif; ?>
                     </tbody>
                 </table>
-
+                <input type="hidden" name="title" value="<?php echo $theposts['post_title']; ?>" >
+                <input type="hidden" name="id" value="<?php echo $theposts['ID']; ?>" >
                 <?php wp_nonce_field('form_kueisoner', 'form_kueisoner'); ?>
                 <div class="text-end mt-2 mb-4">
                     <button type="submit" class="btn btn-success">Submit</button>
@@ -85,7 +86,6 @@ class Wpz_Kueisoner_Form
         <?php endif; ?>
     <?php
     }
-
 
     public function submit($data = null)
     {
@@ -112,50 +112,50 @@ class Wpz_Kueisoner_Form
                     'value' => $value_fak,
                     'title' => get_the_title($kfak),
                 ];
-                $result_dim['label'][]  = get_the_title($kfak);
-                $result_dim['data'][]   = $value_fak;
                 $sumvalue_fak += $value_fak;
             }
             $total_fak = count($dim);
+            $total_val = ($sumvalue_fak / $total_fak);
             $result_dim['value_faktor']  = $sumvalue_fak;
             $result_dim['total_faktor']  = $total_fak;
-            $result_dim['value']         = ($sumvalue_fak / $total_fak);
+            $result_dim['value']         = $total_val;
 
-            $result[] = $result_dim;
+            $result['labels'][]         = get_the_title($kdim);
+            $result['datas'][]          = $total_val;
+            $result['dimensi'][]        = $result_dim;
         }
         $data['result'] = $result;
     ?>
 
-
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        <?php foreach ($data['result'] as $datadim) : ?>
-            <div style="max-width: 100%;">
-                <div>
-                    <?php echo $datadim['title']; ?>
-                </div>
-                <canvas id="Chart-<?php echo $datadim['id']; ?>" width="200"></canvas>
+        <div style="max-width: 100%;">
+            <div>
+                <?php echo $data['title']; ?>
             </div>
-            <script>
-                jQuery(function($) {
-                    $(document).ready(function() {
-                        const ctx = document.getElementById('Chart-<?php echo $datadim['id']; ?>');
-                        new Chart(ctx, {
-                            type: 'radar',
-                            data: {
-                                labels: ['<?php echo implode("','", $datadim['label']); ?>'],
-                                datasets: [{
-                                    label: '<?php echo $datadim['title']; ?>',
-                                    data: [<?php echo implode(",", $datadim['data']); ?>],
+            <canvas id="Chartkuiz" width="200"></canvas>
+        </div>
+        <script>
+            jQuery(function($) {
+                $(document).ready(function() {
+                    const ctx = document.getElementById('Chartkuiz');
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: ['<?php echo implode("','",$data['result']['labels']);?>'],
+                            datasets: [
+                                {
+                                    label: '<?php echo $data['title']; ?>',
+                                    data: [<?php echo implode(",",$data['result']['datas']);?>],
                                     borderWidth: 1
-                                }]
-                            },
-                            fill: false,
-                        });
+                                }
+                            ]
+                        },
+                        fill: false,
                     });
                 });
-            </script>
-        <?php endforeach; ?>
+            });
+        </script>
 
 <?php
     }
