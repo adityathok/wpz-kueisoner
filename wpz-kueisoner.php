@@ -34,6 +34,7 @@ $includes = [
     'inc/faktor.php',
     'inc/indikator.php',
     'inc/form.php',
+    'inc/hasil.php',
     'inc/shortcode.php',
 ];
 foreach ($includes as $include) {

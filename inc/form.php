@@ -7,9 +7,6 @@ class Wpz_Kueisoner_Form
         $theposts   = $theposts->get($id);
         $opsi       = $theposts['opsi'];
         $countopsi  = count($theposts['opsi']);
-        // echo '<pre>';
-        // print_r($theposts);
-        // echo '</pre>';
 ?>
         <?php if ($theposts) : ?>
             <form action="" method="post" class="table-responsive">
@@ -137,6 +134,16 @@ class Wpz_Kueisoner_Form
         // echo '<pre>';
         // print_r($result);
         // echo '</pre>';
+
+        //insert to HASIL
+        $my_post = array(
+            'post_title'    => wp_strip_all_tags( $data['title'] ),
+            'post_content'  => '',
+            'post_status'   => 'draft',
+            'post_author'   => get_current_user_id(),
+            'post_type'     => 'hasil-kueisoner'
+          );
+        wp_insert_post( $my_post );
 
     ?>
 
