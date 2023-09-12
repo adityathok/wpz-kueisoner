@@ -95,6 +95,12 @@ class Wpz_Kueisoner
 
     public function render_detail_metabox($post)
     {
+        if (isset($post->ID)) {
+            echo '<p>';
+            echo 'Shortcode : <span class="button">[wpkueisoner id="' . $post->ID . '"]</span>';
+            echo '</p>';
+        }
+
         echo '<p style="text-align:right;">';
         echo '<a class="button" href="' . get_dashboard_url() . 'post-new.php?post_type=dimensi-kueisoner&idkueisoner=' . $post->ID . '" target="_blank">Tambah Dimensi</a>';
         echo '</p>';
