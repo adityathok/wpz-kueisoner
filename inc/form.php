@@ -50,8 +50,10 @@ class Wpz_Kueisoner_Form
                                                     </td>
                                                     <?php if ($opsi) : ?>
                                                         <?php foreach ($opsi as $kop => $op) : ?>
-                                                            <td class="text-center">
-                                                                <input class="form-check-input" type="radio" name="value[<?php echo $dimensi['ID']; ?>][<?php echo $faktor['ID']; ?>][<?php echo $indikator['ID']; ?>]" value="<?php echo $kop; ?>" required>
+                                                            <?php $idind = $dimensi['ID'].$faktor['ID'].$indikator['ID'].$kop; ?>
+                                                            <td class="text-center position-relative">
+                                                                <input class="form-check-input" id="<?php echo $idind; ?>"  type="radio" name="value[<?php echo $dimensi['ID']; ?>][<?php echo $faktor['ID']; ?>][<?php echo $indikator['ID']; ?>]" value="<?php echo $kop; ?>" required>
+                                                                <label class="form-check-label position-absolute top-0 bottom-0 end-0 start-0" for="<?php echo $idind; ?>"></label>
                                                             </td>
                                                         <?php endforeach; ?>
                                                     <?php endif; ?>
@@ -131,19 +133,19 @@ class Wpz_Kueisoner_Form
 
         $data['result']                 = $result;
 
-        // echo '<pre>';
-        // print_r($result);
-        // echo '</pre>';
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
 
         //insert to HASIL
-        $my_post = array(
-            'post_title'    => wp_strip_all_tags( $data['title'] ),
-            'post_content'  => '',
-            'post_status'   => 'draft',
-            'post_author'   => get_current_user_id(),
-            'post_type'     => 'hasil-kueisoner'
-          );
-        wp_insert_post( $my_post );
+        // $my_post = array(
+        //     'post_title'    => wp_strip_all_tags( $data['title'] ),
+        //     'post_content'  => '',
+        //     'post_status'   => 'draft',
+        //     'post_author'   => get_current_user_id(),
+        //     'post_type'     => 'hasil-kueisoner'
+        //   );
+        // wp_insert_post( $my_post );
 
     ?>
 
