@@ -60,9 +60,13 @@ class Wpz_Kueisoner_Faktor
                     'std'        => isset($_GET['iddimensi']) ? $_GET['iddimensi'] : '',
                 ],
                 [
+                    'name' => 'Order',
+                    'id'   => '_order',
                     'type' => 'number',
-                    'name' => esc_html__('Bobot Faktor', 'wpz'),
-                    'id'   => $prefix . 'bobot',
+                    'min'  => 1,
+                    'step' => 1,
+                    'std'  => '1',
+                    'desc' => 'Order / urutan faktor',
                 ],
             ],
         ];
@@ -93,9 +97,10 @@ class Wpz_Kueisoner_Faktor
                 $theposts   = [
                     'ID'                => $thepost['ID'],
                     'post_title'        => $thepost['post_title'],
-                    'bobot'             => get_post_meta($thepost['ID'], 'bobot', true),
                     'indikator'         => $theindikator,
                     'total_indikator'   => count($theindikator),
+                    'dimensi'           => get_post_meta($thepost['ID'], 'dimensi', true),
+                    'order'             => get_post_meta($thepost['ID'], '_order', true),
                 ];
                 $result[] = $theposts;
             }

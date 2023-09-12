@@ -97,60 +97,82 @@ class Wpz_Kueisoner
     {
         if (isset($post->ID)) {
             echo '<p>';
-            echo 'Shortcode : <span class="button">[wpkueisoner id="' . $post->ID . '"]</span>';
+                echo '<span class="button">[wpkueisoner id="' . $post->ID . '"]</span> ';
+                echo '<a class="button" href="' . get_dashboard_url() . 'post-new.php?post_type=dimensi-kueisoner&idkueisoner=' . $post->ID . '" target="_blank">Tambah Dimensi</a>';
             echo '</p>';
-        }
 
-        echo '<p style="text-align:right;">';
-        echo '<a class="button" href="' . get_dashboard_url() . 'post-new.php?post_type=dimensi-kueisoner&idkueisoner=' . $post->ID . '" target="_blank">Tambah Dimensi</a>';
-        echo '</p>';
-
-
-        $newdim  = new Wpz_Kueisoner_Dimensi();
-        $newdim  = $newdim->get($post->ID);
-        if ($newdim) {
-            echo '<table class="wp-list-table widefat fixed striped table-view-list pages">';
-            echo '<thead>';
-            echo '<tr><th>Dimensi</th><th>Bobot</th><th>Faktor</th><th>Bobot</th><th>Indikator</th><th></th></tr>';
-            echo '</thead>';
-            echo '<tbody>';
-            foreach ($newdim as $dim) {
-                echo '<tr>';
-                echo '<td>' . $dim['post_title'] . '</td>';
-                echo '<td>' . $dim['bobot'] . '</td>';
-                echo '<td colspan="3"></td>';
-                echo '<td>';
-                echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $dim['ID'] . '&action=edit#wpbody-content">Edit</a>';
-                echo '</td>';
-                echo '</tr>';
-                foreach ($dim['faktor'] as $faktor) {
-                    echo '<tr>';
-                    echo '<td colspan="2"></td>';
-                    echo '<td>' . esc_html($faktor['post_title']) . '</td>';
-                    echo '<td>' . esc_html($faktor['bobot']) . '</td>';
-                    echo '<td></td>';
-                    echo '<td>';
-                    echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $faktor['ID'] . '&action=edit#wpbody-content">Edit</a>';
-                    echo '</td>';
-                    echo '</tr>';
-                    if ($faktor['indikator']) {
-                        foreach ($faktor['indikator'] as $indi) {
+            $newdim  = new Wpz_Kueisoner_Dimensi();
+            $newdim  = $newdim->get($post->ID);
+            if ($newdim) {
+                echo '<table class="wp-list-table widefat fixed striped table-view-list pages">';
+                    echo '<thead>';
+                    echo '<tr><th>Dimensi</th><th>Faktor</th><th>Indikator</th></tr>';
+                    echo '</thead>';
+                    echo '<tbody>';
+                    foreach ($newdim as $dim) {
+                        if ($dim['faktor']) {
+                            foreach ($dim['faktor'] as $kfak => $faktor) {
+                                if ($faktor['indikator']) {
+                                    foreach ($faktor['indikator'] as $kind => $indi) {
+                                        echo '<tr>';
+                                            echo '<td>';
+                                                if($kfak == 0 && $kind == 0) {
+                                                    echo '<strong>'.$dim['post_title'].'</strong>';
+                                                    echo '<div>';
+                                                        echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $dim['ID'] . '&action=edit#wpbody-content" target="_blank">Edit</a> | ';
+                                                        echo '<a href="' . get_dashboard_url() . 'post-new.php?post_type=faktor-kueisoner&iddimensi=' . $dim['ID'] . '" target="_blank">Tambah Faktor</a>';
+                                                    echo '</div>';
+                                                }
+                                            echo '</td>';
+                                            echo '<td>';
+                                                if($kind == 0) {
+                                                    echo '<strong>'.$faktor['post_title'].'</strong>';
+                                                    echo '<div>';
+                                                        echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $faktor['ID'] . '&action=edit#wpbody-content" target="_blank">Edit</a> | ';
+                                                        echo '<a href="' . get_dashboard_url() . 'post-new.php?post_type=indikator-kueisoner&iddimensi=' . $dim['ID'] . '&idfaktor=' . $faktor['ID'] . '" target="_blank">Tambah Indikator</a>';
+                                                    echo '</div>';
+                                                }
+                                            echo '</td>';
+                                            echo '<td>';
+                                                echo '<strong>'.$indi['kode'].'</strong> | ';
+                                                echo $indi['indikator'];
+                                                echo '<div>';
+                                                    echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $faktor['ID'] . '&action=edit#wpbody-content" target="_blank">Edit</a>';
+                                                echo '</div>';
+                                            echo '</td>';
+                                        echo '</tr>';
+                                    }
+                                } else {
+                                    echo '<tr>';
+                                        echo '<td></td>';
+                                        echo '<td>';
+                                            echo '<strong>'.$faktor['post_title'].'</strong>';
+                                            echo '<div>';
+                                                echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $faktor['ID'] . '&action=edit#wpbody-content" target="_blank">Edit</a> | ';
+                                                echo '<a href="' . get_dashboard_url() . 'post-new.php?post_type=indikator-kueisoner&iddimensi=' . $dim['ID'] . '&idfaktor=' . $faktor['ID'] . '" target="_blank">Tambah Indikator</a>';
+                                            echo '</div>';
+                                        echo '</td>';
+                                        echo '<td></td>';
+                                    echo '</tr>';
+                                }
+                            }
+                        } else {
                             echo '<tr>';
-                            echo '<td colspan="4"></td>';
-                            echo '<td>';
-                            echo '<strong>' . $indi['kode'] . '</strong>';
-                            echo '<div>' . $indi['indikator'] . '</div>';
-                            echo '</td>';
-                            echo '<td>';
-                            echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $indi['ID'] . '&action=edit#wpbody-content">Edit</a>';
-                            echo '</td>';
+                                echo '<td>';                                    
+                                    echo '<strong>'.$dim['post_title'].'</strong>';
+                                    echo '<div>';
+                                        echo '<a href="' . get_dashboard_url() . 'post.php?post=' . $dim['ID'] . '&action=edit#wpbody-content" target="_blank">Edit</a> | ';
+                                        echo '<a href="' . get_dashboard_url() . 'post-new.php?post_type=faktor-kueisoner&iddimensi=' . $dim['ID'] . '" target="_blank">Tambah Faktor</a>';
+                                    echo '</div>';
+                                echo '</td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
                             echo '</tr>';
                         }
                     }
-                }
+                    echo '</tbody>';
+                echo '</table>';
             }
-            echo '</tbody>';
-            echo '</table>';
         }
     }
 

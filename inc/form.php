@@ -6,7 +6,7 @@ class Wpz_Kueisoner_Form
         $theposts   = new Wpz_Kueisoner();
         $theposts   = $theposts->get($id);
         $opsi       = $theposts['opsi'];
-        $countopsi  = count($theposts['opsi']);
+        $countopsi  = $theposts['opsi'] ? count($theposts['opsi']) : 0;
 ?>
         <?php if ($theposts) : ?>
             <form action="" method="post" class="table-responsive">
@@ -50,9 +50,9 @@ class Wpz_Kueisoner_Form
                                                     </td>
                                                     <?php if ($opsi) : ?>
                                                         <?php foreach ($opsi as $kop => $op) : ?>
-                                                            <?php $idind = $dimensi['ID'].$faktor['ID'].$indikator['ID'].$kop; ?>
+                                                            <?php $idind = $dimensi['ID'] . $faktor['ID'] . $indikator['ID'] . $kop; ?>
                                                             <td class="text-center position-relative">
-                                                                <input class="form-check-input" id="<?php echo $idind; ?>"  type="radio" name="value[<?php echo $dimensi['ID']; ?>][<?php echo $faktor['ID']; ?>][<?php echo $indikator['ID']; ?>]" value="<?php echo $kop; ?>" required>
+                                                                <input class="form-check-input" id="<?php echo $idind; ?>" type="radio" name="value[<?php echo $dimensi['ID']; ?>][<?php echo $faktor['ID']; ?>][<?php echo $indikator['ID']; ?>]" value="<?php echo $kop; ?>" required>
                                                                 <label class="form-check-label position-absolute top-0 bottom-0 end-0 start-0" title="<?php echo $op; ?>" for="<?php echo $idind; ?>"></label>
                                                             </td>
                                                         <?php endforeach; ?>
@@ -65,18 +65,25 @@ class Wpz_Kueisoner_Form
                                                 <td>
                                                     <?php echo $faktor['post_title']; ?>
                                                 </td>
-                                                <td colspan="<?php echo $countopsi + 3; ?>"></td>
+                                                <td colspan="<?php echo $countopsi + 2; ?>"></td>
                                             </tr>
                                         <?php endif; ?>
 
                                     <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $dimensi['post_title']; ?>
+                                            <td colspan="<?php echo $countopsi + 3; ?>"></td>
+                                        </td>
+                                    </tr>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>
                 </table>
-                <input type="hidden" name="title" value="<?php echo $theposts['post_title']; ?>" >
-                <input type="hidden" name="id" value="<?php echo $theposts['ID']; ?>" >
+                <input type="hidden" name="title" value="<?php echo $theposts['post_title']; ?>">
+                <input type="hidden" name="id" value="<?php echo $theposts['ID']; ?>">
                 <?php wp_nonce_field('form_kueisoner', 'form_kueisoner'); ?>
                 <div class="text-end mt-2 mb-4">
                     <button type="submit" class="btn btn-success">Submit</button>
@@ -138,21 +145,21 @@ class Wpz_Kueisoner_Form
         // echo '</pre>';
 
         //insert to HASIL
-        $my_post = array(
-            'post_title'    => wp_strip_all_tags( $data['title'] ),
-            'post_content'  => '',
-            'post_status'   => 'draft',
-            'post_author'   => get_current_user_id(),
-            'post_type'     => 'hasil-kueisoner',
-            'meta_input'    => array(
-                'hasil'             => $data,
-                'kuisoner'          => $data['id'],
-                'kuisoner_total'    => $data['result']['kuisoner']['total'],
-                'kuisoner_count'    => $data['result']['kuisoner']['count'],
-                'kuisoner_value'    => $data['result']['kuisoner']['value'],
-            ),
-          );
-        wp_insert_post( $my_post );
+        // $my_post = array(
+        //     'post_title'    => wp_strip_all_tags($data['title']),
+        //     'post_content'  => '',
+        //     'post_status'   => 'draft',
+        //     'post_author'   => get_current_user_id(),
+        //     'post_type'     => 'hasil-kueisoner',
+        //     'meta_input'    => array(
+        //         'hasil'             => $data,
+        //         'kuisoner'          => $data['id'],
+        //         'kuisoner_total'    => $data['result']['kuisoner']['total'],
+        //         'kuisoner_count'    => $data['result']['kuisoner']['count'],
+        //         'kuisoner_value'    => $data['result']['kuisoner']['value'],
+        //     ),
+        // );
+        // wp_insert_post($my_post);
 
     ?>
 
@@ -166,14 +173,12 @@ class Wpz_Kueisoner_Form
                         new Chart(ctx, {
                             type: 'radar',
                             data: {
-                                labels: ['<?php echo implode("','",$data['result']['labels']);?>'],
-                                datasets: [
-                                    {
-                                        label: '<?php echo $data['title']; ?>',
-                                        data: [<?php echo implode(",",$data['result']['datas']);?>],
-                                        borderWidth: 1
-                                    }
-                                ]
+                                labels: ['<?php echo implode("','", $data['result']['labels']); ?>'],
+                                datasets: [{
+                                    label: '<?php echo $data['title']; ?>',
+                                    data: [<?php echo implode(",", $data['result']['datas']); ?>],
+                                    borderWidth: 1
+                                }]
                             },
                             fill: false,
                         });

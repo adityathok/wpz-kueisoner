@@ -53,6 +53,14 @@ class Wpz_Kueisoner_Indikator
             'fields'     => [
                 [
                     'type'       => 'post',
+                    'name'       => esc_html__('Dimensi', 'wpz'),
+                    'id'         => $prefix . 'dimensi',
+                    'post_type'  => 'dimensi-kueisoner',
+                    'field_type' => 'select_advanced',
+                    'std'        => isset($_GET['iddimensi']) ? $_GET['iddimensi'] : '',
+                ],
+                [
+                    'type'       => 'post',
                     'name'       => esc_html__('Faktor', 'wpz'),
                     'id'         => $prefix . 'faktor',
                     'post_type'  => 'faktor-kueisoner',
@@ -68,6 +76,15 @@ class Wpz_Kueisoner_Indikator
                     'type' => 'textarea',
                     'name' => esc_html__('Indikator', 'wpz'),
                     'id'   => $prefix . 'indikator',
+                ],
+                [
+                    'name' => 'Order',
+                    'id'   => '_order',
+                    'type' => 'number',
+                    'min'  => 1,
+                    'step' => 1,
+                    'std'  => '1',
+                    'desc' => 'Order / urutan indikator',
                 ],
             ],
         ];
@@ -97,6 +114,9 @@ class Wpz_Kueisoner_Indikator
                     'post_title'        => $post->post_title,
                     'kode'              => get_post_meta($post->ID, 'kode', true),
                     'indikator'         => get_post_meta($post->ID, 'indikator', true),
+                    'dimensi'           => get_post_meta($post->ID, 'dimensi', true),
+                    'faktor'            => get_post_meta($post->ID, 'faktor', true),
+                    'order'             => get_post_meta($post->ID, '_order', true),
                 ];
                 $result[]               = $theposts;
             }
