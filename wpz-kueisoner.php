@@ -30,7 +30,6 @@ if (!defined('WPZ_KUEIS_PLUGIN_URL'))     define('WPZ_KUEIS_PLUGIN_URL', plugin_
 $includes = [
     'inc/admin.php',
     'inc/kueisoner.php',
-    'inc/dimensi.php',
     'inc/faktor.php',
     'inc/indikator.php',
     'inc/form.php',

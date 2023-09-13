@@ -53,11 +53,11 @@ class Wpz_Kueisoner_Faktor
             'fields'     => [
                 [
                     'type'       => 'post',
-                    'name'       => esc_html__('Dimensi', 'wpz'),
-                    'id'         => $prefix . 'dimensi',
-                    'post_type'  => 'dimensi-kueisoner',
+                    'name'       => esc_html__('Dimensi Kuesioner', 'wpz'),
+                    'id'         => $prefix . 'kueisoner',
+                    'post_type'  => 'kueisoner',
                     'field_type' => 'select_advanced',
-                    'std'        => isset($_GET['iddimensi']) ? $_GET['iddimensi'] : '',
+                    'std'        => isset($_GET['idkueisoner']) ? $_GET['idkueisoner'] : '',
                 ],
                 [
                     'name' => 'Order',
@@ -74,7 +74,7 @@ class Wpz_Kueisoner_Faktor
         return $meta_boxes;
     }
 
-    public function get($iddimensi = null)
+    public function get($idkueisoner = null)
     {
         $result = [];
         $fargs = array(
@@ -82,8 +82,8 @@ class Wpz_Kueisoner_Faktor
             'posts_per_page'    => -1,
             'orderby'           => 'date',
             'order'             => 'ASC',
-            'meta_key'          => 'dimensi',
-            'meta_value'        => $iddimensi,
+            'meta_key'          => 'kueisoner',
+            'meta_value'        => $idkueisoner,
             'meta_compare'      => '=='
         );
         $faktor_query = new WP_Query($fargs);
@@ -96,7 +96,7 @@ class Wpz_Kueisoner_Faktor
                 $theindikator           = $newindi->get($thepost['ID']);
                 $theposts   = [
                     'ID'                => $thepost['ID'],
-                    'post_title'        => $thepost['post_title'],
+                    'title'             => $thepost['post_title'],
                     'indikator'         => $theindikator,
                     'total_indikator'   => count($theindikator),
                     'dimensi'           => get_post_meta($thepost['ID'], 'dimensi', true),

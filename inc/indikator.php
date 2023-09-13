@@ -53,11 +53,11 @@ class Wpz_Kueisoner_Indikator
             'fields'     => [
                 [
                     'type'       => 'post',
-                    'name'       => esc_html__('Dimensi', 'wpz'),
-                    'id'         => $prefix . 'dimensi',
-                    'post_type'  => 'dimensi-kueisoner',
+                    'name'       => esc_html__('Dimensi Kuesioner', 'wpz'),
+                    'id'         => $prefix . 'kueisoner',
+                    'post_type'  => 'kueisoner',
                     'field_type' => 'select_advanced',
-                    'std'        => isset($_GET['iddimensi']) ? $_GET['iddimensi'] : '',
+                    'std'        => isset($_GET['idkueisoner']) ? $_GET['idkueisoner'] : '',
                 ],
                 [
                     'type'       => 'post',
@@ -111,10 +111,10 @@ class Wpz_Kueisoner_Indikator
                 global $post;
                 $theposts   = [
                     'ID'                => $post->ID,
-                    'post_title'        => $post->post_title,
+                    'title'             => $post->post_title,
                     'kode'              => get_post_meta($post->ID, 'kode', true),
                     'indikator'         => get_post_meta($post->ID, 'indikator', true),
-                    'dimensi'           => get_post_meta($post->ID, 'dimensi', true),
+                    'kueisoner'         => get_post_meta($post->ID, 'kueisoner', true),
                     'faktor'            => get_post_meta($post->ID, 'faktor', true),
                     'order'             => get_post_meta($post->ID, '_order', true),
                 ];

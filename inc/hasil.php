@@ -54,34 +54,75 @@ class Wpz_Kueisoner_Hasil
         }
     }
     
-    public function radar($data=null)
-    {
+    public function card($data=null)
+    {    
+        $dataresult = $data['result'];
+        $datafaktor = $dataresult['faktor'];
+        $datachart  = $dataresult['chart'];
         ?>
-        <div style="max-width: 100%;">
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <canvas id="Chartkuiz" width="200"></canvas>
-            <script>
-                jQuery(function($) {
-                    $(document).ready(function() {
-                        const ctx = document.getElementById('Chartkuiz');
-                        new Chart(ctx, {
-                            type: 'radar',
-                            data: {
-                                labels: ['<?php echo implode("','",$data['result']['labels']);?>'],
-                                datasets: [
-                                    {
-                                        label: '<?php echo $data['title']; ?>',
-                                        data: [<?php echo implode(",",$data['result']['datas']);?>],
-                                        borderWidth: 1
-                                    }
-                                ]
-                            },
-                            fill: false,
-                        });
-                    });
-                });
-            </script>
-        </div>
+            <div class="card shadow m-2">
+                <div class="card-header bg-dark text-light py-3">
+                    <?php echo get_the_title($data['id']); ?>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="row">
+                            <?php foreach( $datafaktor as $faktor): ?>
+                                <div class="col-md-4 col-6 pb-3">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-header">
+                                            <?php echo get_the_title($faktor['id']); ?>
+                                        </div>
+                                        <div class="card-body fst-italic">
+                                            <?php echo $faktor['sum']; ?> / <?php echo $faktor['total']; ?> = 
+                                            <span class="fs-4">
+                                                <?php echo $faktor['value']; ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                            <div class="col-md-4 col-6 pb-3">
+                                <div class="card shadow-sm border-0">
+                                    <div class="card-header">
+                                        Total
+                                    </div>
+                                    <div class="card-body fst-italic">
+                                        <?php echo $dataresult['faktor_sum']; ?> / <?php echo $dataresult['faktor_total']; ?> = 
+                                        <span class="fs-4">
+                                            <?php echo round($dataresult['faktor_value'],2); ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-width: 100%;">
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <canvas id="Chartkuiz" width="200"></canvas>
+                        <script>
+                            jQuery(function($) {
+                                $(document).ready(function() {
+                                    const ctx = document.getElementById('Chartkuiz');
+                                    new Chart(ctx, {
+                                        type: 'radar',
+                                        data: {
+                                            labels: ['<?php echo implode("','", $datachart['labels']); ?>'],
+                                            datasets: [{
+                                                label: '<?php echo get_the_title($data['id']); ?>',
+                                                data: [<?php echo implode(",", $datachart['datas']); ?>],
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        fill: false,
+                                    });
+                                });
+                            });
+                        </script>
+                    </div>
+
+                </div>
+            </div>
         <?php
     }
 
