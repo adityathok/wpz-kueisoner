@@ -49,8 +49,7 @@ class Wpz_Kueisoner_Hasil
     {
         $datas  = get_post_meta($post->ID,'hasil',true);
         if ($datas) {
-            print_r($datas);
-            echo $this->radar($datas);
+            echo $this->card($datas);
         }
     }
     
