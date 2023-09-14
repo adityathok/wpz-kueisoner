@@ -110,8 +110,8 @@ class Wpz_Kueisoner_Form
             'post_type'     => 'hasil-kueisoner',
             'meta_input'    => array(
                 'hasil'             => $data,
-                'kuisoner'          => $data['id'],
-                'kuisoner_content'  => $thekuei,
+                'kueisoner'         => $data['id'],
+                'kueisoner_content' => $thekuei,
                 'faktor_total'      => $data['result']['faktor_total'],
                 'faktor_sum'        => $data['result']['faktor_sum'],
                 'faktor_value'      => $data['result']['faktor_value'],
@@ -121,6 +121,6 @@ class Wpz_Kueisoner_Form
         
 
         $render = new Wpz_Kueisoner_Hasil();
-        echo $render->card($data);
+        echo $render->radar($data);
     }
 }
