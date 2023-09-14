@@ -26,7 +26,7 @@ class Wpz_Kueisoner_Faktor
         $args = array(
             'labels'             => $labels,
             'public'             => true,
-            'publicly_queryable' => true,
+            'publicly_queryable' => false,
             'show_ui'            => true,
             'show_in_menu'       => 'edit.php?post_type=kueisoner',
             'query_var'          => true,
